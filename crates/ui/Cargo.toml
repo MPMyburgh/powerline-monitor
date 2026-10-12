@@ -1,0 +1,15 @@
+[package]
+name = "powerline_ui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+powerline_core = { path = "../core" }
+anyhow.workspace = true
+clap.workspace = true
+libc.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+image = { version = "0.25", default-features = false, features = ["png"] }
+eframe = { version = "0.36", default-features = false, features = ["glow", "default_fonts", "persistence", "wayland", "x11"] }
+egui_plot = "0.37"

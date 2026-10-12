@@ -1,0 +1,11 @@
+[package]
+name = "powerline_watch"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+powerline_core = { path = "../core" }
+anyhow.workspace = true
+clap.workspace = true
+serde_json.workspace = true
+crossterm = { version = "0.29", default-features = false, features = ["events"] }

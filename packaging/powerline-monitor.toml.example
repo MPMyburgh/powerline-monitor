@@ -1,0 +1,53 @@
+# powerline-monitor configuration. Every key is optional; command-line flags override it.
+# Lookup: --config PATH, else ~/.config/powerline-monitor/config.toml, else /etc/powerline-monitor.toml.
+# The system unit runs as a dynamic user with no home, so it reads /etc/powerline-monitor.toml.
+
+# Interfaces the adapters are reached on. Empty means every interface that is UP and
+# has /sys/class/net/<name>/type == 1, in name order. rekey needs exactly one.
+interfaces = []
+
+# Seconds between polls for the daemon and the window. 5 to 600.
+poll_seconds = 30
+
+# Hours of readings kept in the history ring (1 to 720). The daemon saves the ring
+# across restarts; Prometheus keeps the durable record.
+history_hours = 24
+
+# Address the daemon serves /metrics and /api/* on. There is no authentication and
+# /api/state lists the LAN MACs behind each adapter, so keep it on loopback or a VPN.
+listen = "127.0.0.1:9702"
+
+# Read from a running daemon instead of polling; no raw-socket capability needed here.
+# daemon_url = "http://server:9702"
+
+# Reserved for desktop notifications ("info", "warning", "critical" or "off").
+# notify_min_severity = "warning"
+
+# When an event is worth reporting. Shown with the defaults.
+#[alerts]
+#lost_after_polls = 3        # an adapter is offline after this many missed polls in a row
+#degraded_after_polls = 10   # a link is slow after staying slow for this many polls in a row
+#floor_mbps = 50             # a link is slow below this rate, whatever it usually does
+#drop_pct = 40               # ...or when it drops this far below its usual rate (ring median)
+
+# Run a program for every event at or above min_severity. The event kind is appended
+# as the last argument, POWERLINE_MONITOR_EVENT / _SEVERITY / _SUMMARY are set in the
+# environment and the full event is written to stdin as JSON. 10 s, then it is killed.
+#[hooks]
+#exec = ["/usr/local/bin/plc-alert"]
+#min_severity = "warning"
+
+# One table per adapter you own, keyed by MAC (':' or '-' separators).
+#   alias   the name shown everywhere instead of the MAC
+#   vendor  overrides the OUI probe: "broadcom" | "qualcomm"
+# No keys or passphrases go in this file.
+#[devices."20:e1:5d:0a:1b:2c"]
+#alias = "Study"
+#vendor = "broadcom"
+
+#[devices."20:e1:5d:0a:3d:4e"]
+#alias = "Lounge"
+
+# Adapters you own but keep unplugged: named when they appear, never reported as unknown.
+#[spares]
+#"20:e1:5d:aa:bb:cc" = "Drawer spare"

@@ -1,0 +1,35 @@
+[workspace]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.dependencies]
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "1"
+clap = { version = "4", features = ["derive"] }
+libc = "0.2"
+
+[package]
+name = "powerline-monitor"
+version = "0.1.0"
+edition = "2021"
+description = "Monitor HomePlug AV/AV2 powerline adapters on Linux: link speeds, roles, factory-key check, desktop GUI, terminal view and Prometheus exporter"
+license = "MIT"
+repository = "https://github.com/MPMyburgh/powerline-monitor"
+readme = "README.md"
+keywords = ["homeplug", "powerline", "prometheus", "tp-link", "network"]
+categories = ["command-line-utilities", "network-programming", "gui"]
+
+[dependencies]
+powerline_core = { path = "crates/core" }
+powerline_daemon = { path = "crates/daemon" }
+powerline_ui = { path = "crates/ui" }
+powerline_ops = { path = "crates/ops" }
+powerline_watch = { path = "crates/watch" }
+anyhow.workspace = true
+clap.workspace = true
+clap_complete = "4"
+serde_json.workspace = true
+toml.workspace = true
+libc.workspace = true

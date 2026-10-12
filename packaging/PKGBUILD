@@ -1,0 +1,46 @@
+# Maintainer: Michael Myburgh <mp.myburgh@outlook.com>
+pkgname=powerline-monitor
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Monitor for HomePlug AV/AV2 powerline adapters: link speeds, factory-key check, desktop UI, terminal view, Prometheus exporter"
+arch=('x86_64' 'aarch64')
+url="https://github.com/MPMyburgh/powerline-monitor"
+license=('MIT')
+depends=('gcc-libs' 'glibc' 'libcap' 'libglvnd' 'libxkbcommon' 'wayland' 'libx11' 'libxcursor' 'libxi' 'libxrandr')
+makedepends=('cargo')
+backup=('etc/powerline-monitor.toml')
+install=powerline-monitor.install
+source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --release --locked
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  install -Dm755 target/release/powerline-monitor "$pkgdir/usr/bin/powerline-monitor"
+  install -Dm644 packaging/powerline-monitor.service "$pkgdir/usr/lib/systemd/system/powerline-monitor.service"
+  install -Dm644 packaging/powerline-monitor.toml.example "$pkgdir/etc/powerline-monitor.toml"
+  install -Dm644 packaging/powerline-monitor.toml.example "$pkgdir/usr/share/doc/powerline-monitor/powerline-monitor.toml.example"
+  install -Dm644 packaging/powerline-monitor.desktop "$pkgdir/usr/share/applications/powerline-monitor.desktop"
+  for s in 16 22 32 48 64 128; do
+    install -Dm644 "packaging/icons/powerline-monitor-$s.png" "$pkgdir/usr/share/icons/hicolor/${s}x${s}/apps/powerline-monitor.png"
+  done
+  install -Dm644 packaging/powerline-monitor.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/powerline-monitor.svg"
+  install -Dm644 packaging/powerline-monitor-symbolic.svg "$pkgdir/usr/share/icons/hicolor/symbolic/apps/powerline-monitor-symbolic.svg"
+  install -d "$pkgdir/usr/share/bash-completion/completions" "$pkgdir/usr/share/zsh/site-functions" "$pkgdir/usr/share/fish/vendor_completions.d"
+  target/release/powerline-monitor completions bash > "$pkgdir/usr/share/bash-completion/completions/powerline-monitor"
+  target/release/powerline-monitor completions zsh > "$pkgdir/usr/share/zsh/site-functions/_powerline-monitor"
+  target/release/powerline-monitor completions fish > "$pkgdir/usr/share/fish/vendor_completions.d/powerline-monitor.fish"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/powerline-monitor/LICENSE"
+}

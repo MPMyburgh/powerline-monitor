@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Powerline Monitor
+GenericName=Powerline network monitor
+Comment=See whether your powerline adapters are online, how fast they link, and whether the network is secured
+Exec=powerline-monitor ui
+Icon=powerline-monitor
+Terminal=false
+Categories=Network;Monitor;System;
+Keywords=powerline;homeplug;homeplug av;plc;tp-link;adapter;speed;network;prometheus;
+StartupWMClass=powerline-monitor

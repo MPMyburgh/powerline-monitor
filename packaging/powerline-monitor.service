@@ -1,0 +1,22 @@
+[Unit]
+Description=Powerline Monitor: HomePlug AV poller and Prometheus exporter
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+ExecStart=/usr/bin/powerline-monitor daemon
+Environment=POWERLINE_MONITOR_HOST=%H
+StateDirectory=powerline-monitor
+StateDirectoryMode=0700
+AmbientCapabilities=CAP_NET_RAW
+CapabilityBoundingSet=CAP_NET_RAW
+NoNewPrivileges=yes
+ProtectSystem=strict
+RestrictAddressFamilies=AF_PACKET AF_INET AF_INET6
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
